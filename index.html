@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Твой голос важен — Опросник</title>
+    <link rel="icon" type="image/png" href="images/favicon.png" />
+    <style>
+        /* ===== Стиль компании "Пиксель Плюс" ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: #e8edf3;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 820px;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 40px 45px;
+            box-shadow: 0 20px 60px rgba(28, 45, 65, 0.10);
+            animation: fadeIn 0.5s ease;
+            border: 3px solid #bd0a13;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== Шапка опросника ===== */
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 28px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eef2f6;
+        }
+
+        .logo {
+            flex-shrink: 0;
+        }
+
+        .logo img {
+            height: 48px;
+            width: auto;
+            display: block;
+        }
+
+        /* ===== Основные элементы ===== */
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1d2d44;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+
+        .subhead {
+            font-size: 16px;
+            color: #5a6d7e;
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+
+        .subhead strong {
+            color: #1d2d44;
+        }
+
+        .form-group {
+            margin-bottom: 32px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 16px;
+            color: #1d2d44;
+            margin-bottom: 6px;
+        }
+
+        .form-group .required {
+            color: #bd0a13;
+            font-weight: 700;
+            margin-left: 2px;
+        }
+
+        .form-group .hint {
+            display: block;
+            font-size: 14px;
+            font-weight: 400;
+            color: #7a8b9e;
+            margin-bottom: 12px;
+        }
+
+        /* ===== Выпадающий список ===== */
+        select {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #dde3e9;
+            border-radius: 12px;
+            font-size: 16px;
+            color: #1d2d44;
+            background: #ffffff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235a6d7e' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 18px center;
+            appearance: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+        }
+
+        select:focus {
+            border-color: #bd0a13;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(189, 10, 19, 0.15);
+        }
+
+        select:invalid {
+            color: #7a8b9e;
+        }
+
+        select option {
+            color: #1d2d44;
+        }
+
+        /* ===== Шкалы (1-5) ===== */
+        .scale-container {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px 0;
+            margin-top: 8px;
+        }
+
+        .scale-labels {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            font-size: 14px;
+            color: #5a6d7e;
+            margin-top: 6px;
+        }
+
+        .scale-labels span:first-child {
+            text-align: left;
+        }
+        .scale-labels span:last-child {
+            text-align: right;
+        }
+
+        .scale-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2px;
+            width: 100%;
+            margin: 4px 0 2px;
+            justify-content: space-between;
+        }
+
+        .scale-options input[type="radio"] {
+            display: none;
+        }
+
+        .scale-options label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 2px solid #dde3e9;
+            background: #ffffff;
+            font-size: 16px;
+            font-weight: 600;
+            color: #1d2d44;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .scale-options label:hover {
+            border-color: #bd0a13;
+            background: #fdf0f1;
+        }
+
+        .scale-options input[type="radio"]:checked + label {
+            border-color: #bd0a13;
+            background: #bd0a13;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(189, 10, 19, 0.30);
+        }
+
+        /* ===== Радиокнопки (да/нет/частично) ===== */
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .radio-group label {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 400;
+            font-size: 15px;
+            color: #1d2d44;
+            cursor: pointer;
+            padding: 10px 18px;
+            border: 2px solid #dde3e9;
+            border-radius: 12px;
+            transition: all 0.15s ease;
+            width: auto;
+            min-width: unset;
+            max-width: none;
+            flex-shrink: 0;    
+        }
+
+        .radio-group label:hover {
+            border-color: #bd0a13;
+            background: #fdf0f1;
+        }
+
+        .radio-group input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #bd0a13;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        /* ===== Чекбоксы (бенефиты) ===== */
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px 20px;
+            margin-top: 8px;
+        }
+
+        .checkbox-grid label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 400;
+            font-size: 15px;
+            color: #1d2d44;
+            cursor: pointer;
+            padding: 6px 0;
+            transition: background 0.15s ease;
+        }
+
+        .checkbox-grid label:hover {
+            color: #bd0a13;
+        }
+
+        .checkbox-grid input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #bd0a13;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        /* ===== Текстовые поля ===== */
+        textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #dde3e9;
+            border-radius: 12px;
+            font-size: 15px;
+            font-family: inherit;
+            color: #1d2d44;
+            resize: vertical;
+            min-height: 90px;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        textarea:focus {
+            border-color: #bd0a13;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(189, 10, 19, 0.12);
+        }
+
+        /* ===== Кнопка отправки ===== */
+        .btn-submit {
+            display: inline-block;
+            width: 100%;
+            padding: 16px 32px;
+            background: #bd0a13;
+            color: #ffffff;
+            border: none;
+            border-radius: 60px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            margin-top: 10px;
+            text-align: center;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-submit:hover:not(:disabled) {
+            background: #a00810;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(189, 10, 19, 0.30);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* ===== Экран благодарности ===== */
+        #thank-you {
+            text-align: center;
+            padding: 30px 20px 20px;
+        }
+
+        #thank-you .checkmark {
+            font-size: 64px;
+            display: block;
+            margin-bottom: 16px;
+        }
+
+        #thank-you h2 {
+            font-size: 28px;
+            color: #1d2d44;
+            margin-bottom: 12px;
+        }
+
+        #thank-you p {
+            font-size: 16px;
+            color: #5a6d7e;
+            line-height: 1.7;
+        }
+
+        /* ===== Адаптивность ===== */
+        @media (max-width: 600px) {
+            .card {
+                padding: 24px;
+                border-radius: 16px;
+            }
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            .logo img {
+                height: 36px;
+            }
+            h1 {
+                font-size: 22px;
+            }
+            .subhead {
+                font-size: 15px;
+            }
+            .scale-options label {
+                width: 40px;
+                height: 40px;
+                font-size: 14px;
+            }
+            .checkbox-grid {
+                grid-template-columns: 1fr;
+            }
+            .radio-group label {
+                padding: 8px 14px;
+                font-size: 14px;
+            }
+            .btn-submit {
+                font-size: 16px;
+                padding: 14px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- ===== ОСНОВНАЯ ФОРМА ===== -->
+        <div id="survey" class="card">
+            <!-- Шапка с логотипом -->
+            <div class="header">
+                <div class="logo">
+                    <img src="images/logo.png" alt="Пиксель Плюс" />
+                </div>
+            </div>
+
+            <h1>🎙️ Твой голос важен</h1>
+            <p class="subhead">
+                Привет! 👋 Мы безумно рады, что ты с нами! Первые дни на новом месте — это всегда много впечатлений и новой информации.
+                Нам очень важно, чтобы ты чувствовал(а) себя комфортно. Пожалуйста, ответь на <strong>8 коротких вопросов</strong> — это займёт пару минут,
+                а нам поможет сделать онбординг ещё лучше для тебя и будущих новичков. Поехали! 🚀
+            </p>
+
+            <!-- Вопрос 1: Отдел -->
+            <div class="form-group">
+                <label for="department">
+                    Укажи свой отдел
+                    <span class="required">*</span>
+                </label>
+                <select id="department" required>
+                    <option value="" disabled selected>Выберите ваш отдел</option>
+                    <option value="SUP">Поддержка сайтов (SUP)</option>
+                    <option value="Performance">Performance</option>
+                    <option value="SEO">SEO и реклама (SEO)</option>
+                    <option value="DEV">Разработка сайтов (DEV)</option>
+                    <option value="HR_FIN_ADM">Бухгалтерия и офис (HR &amp; FIN &amp; ADM)</option>
+                    <option value="APP">Мобильные приложения (APP)</option>
+                    <option value="BRND">Корпоративный брендинг (BRND)</option>
+                    <option value="TNDR">Тендеры (TNDR)</option>
+                    <option value="UX">UX-специалисты</option>
+                    <option value="Marketing">Маркетинг</option>
+                </select>
+            </div>
+
+            <!-- Вопрос 2: Встреча в первый день (1-5) -->
+            <div class="form-group">
+                <label>
+                    Насколько хорошо тебя встретили в первый рабочий день?
+                    <span class="required">*</span>
+                </label>
+                <div class="scale-container">
+                    <div class="scale-options">
+                        <input type="radio" name="welcome" value="1" id="welcome_1" required />
+                        <label for="welcome_1">1</label>
+                        <input type="radio" name="welcome" value="2" id="welcome_2" />
+                        <label for="welcome_2">2</label>
+                        <input type="radio" name="welcome" value="3" id="welcome_3" />
+                        <label for="welcome_3">3</label>
+                        <input type="radio" name="welcome" value="4" id="welcome_4" />
+                        <label for="welcome_4">4</label>
+                        <input type="radio" name="welcome" value="5" id="welcome_5" />
+                        <label for="welcome_5">5</label>
+                    </div>
+                    <div class="scale-labels">
+                        <span>Очень холодно / меня никто не встретил</span>
+                        <span>Супер! Очень дружелюбно и радушно</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Вопрос 3: Всё необходимое есть? -->
+            <div class="form-group">
+                <label>
+                    У тебя есть всё необходимое (доступы, оборудование, документы) для выполнения задач?
+                    <span class="required">*</span>
+                </label>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="resources" value="Да, всё есть" required />
+                        Да, всё есть
+                    </label>
+                    <label>
+                        <input type="radio" name="resources" value="Частично, чего-то не хватает" />
+                        Частично, чего-то не хватает
+                    </label>
+                    <label>
+                        <input type="radio" name="resources" value="Нет, многого пока нет" />
+                        Нет, многого пока нет
+                    </label>
+                </div>
+            </div>
+
+            <!-- Вопрос 4: Знание, к кому обращаться (1-5) -->
+            <div class="form-group">
+                <label>
+                    Ты знаешь, к кому обращаться с вопросами по работе?
+                    <span class="required">*</span>
+                </label>
+                <div class="scale-container">
+                    <div class="scale-options">
+                        <input type="radio" name="know_who" value="1" id="know_1" required />
+                        <label for="know_1">1</label>
+                        <input type="radio" name="know_who" value="2" id="know_2" />
+                        <label for="know_2">2</label>
+                        <input type="radio" name="know_who" value="3" id="know_3" />
+                        <label for="know_3">3</label>
+                        <input type="radio" name="know_who" value="4" id="know_4" />
+                        <label for="know_4">4</label>
+                        <input type="radio" name="know_who" value="5" id="know_5" />
+                        <label for="know_5">5</label>
+                    </div>
+                    <div class="scale-labels">
+                        <span>Нет, совсем не знаю</span>
+                        <span>Да, всё чётко понимаю</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Вопрос 5: Бенефиты (множественный выбор) -->
+            <div class="form-group">
+                <label>
+                    Какой из представленных бенефитов ты планируешь использовать в первую очередь?
+                    <span class="required">*</span>
+                </label>
+                <div class="checkbox-grid">
+                    <label>
+                        <input type="checkbox" name="benefits" value="ДМС" />
+                        ДМС
+                    </label>
+                    <label>
+                        <input type="checkbox" name="benefits" value="Фитнес" />
+                        Фитнес
+                    </label>
+                    <label>
+                        <input type="checkbox" name="benefits" value="Йога онлайн" />
+                        Йога онлайн
+                    </label>
+                    <label>
+                        <input type="checkbox" name="benefits" value="Психолог («Ясно»)" />
+                        Психолог («Ясно»)
+                    </label>
+                    <label>
+                        <input type="checkbox" name="benefits" value="Изучение языков" />
+                        Изучение языков
+                    </label>
+                    <label>
+                        <input type="checkbox" name="benefits" value="Покупка профильной литературы" />
+                        Покупка профильной литературы
+                    </label>
+                    <label>
+                        <input type="checkbox" name="benefits" value="Частичная компенсация курсов" />
+                        Частичная компенсация курсов
+                    </label>
+                    <label>
+                        <input type="checkbox" name="benefits" value="Пока не решил(а), изучаю" />
+                        Пока не решил(а), изучаю
+                    </label>
+                </div>
+                <span class="hint">Выберите один или несколько вариантов</span>
+            </div>
+
+            <!-- Вопрос 6: Что было самым полезным (открытый) -->
+            <div class="form-group">
+                <label for="most_useful">
+                    Что было самым полезным в процессе онбординга на этой неделе?
+                    <span class="required">*</span>
+                </label>
+                <textarea id="most_useful" placeholder="Напишите, что было для вас самым полезным..." required></textarea>
+            </div>
+
+            <!-- Вопрос 7: Что улучшить (открытый) -->
+            <div class="form-group">
+                <label for="improve">
+                    Что можно улучшить в первые дни работы для будущих новичков?
+                    <span class="required">*</span>
+                </label>
+                <textarea id="improve" placeholder="Напишите ваши предложения..." required></textarea>
+            </div>
+
+            <!-- Кнопка отправки -->
+            <button type="button" class="btn-submit" id="submit-btn" disabled>Отправить отзыв</button>
+        </div>
+
+        <!-- ===== ЭКРАН БЛАГОДАРНОСТИ ===== -->
+        <div id="thank-you" class="card" style="display: none;">
+            <span class="checkmark">✅</span>
+            <h2>Спасибо, что поделился(лась)! 🌿</h2>
+            <p>
+                Первые дни всегда самые волнительные, и мы очень ценим твою честность.<br />
+                Учтем всё, что ты написал(а), чтобы тебе и будущим новичкам было комфортнее.<br />
+                А пока продолжай знакомиться с командой и входить в ритм. Мы рядом! 💛
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // 1. НАСТРОЙКА FORMPREE
+        // ============================================
+        const FORMSPREE_URL = "https://formspree.io/f/xnpagvvb";
+
+        // ============================================
+        // 2. ОБРАБОТКА ФОРМЫ
+        // ============================================
+
+        function checkFormValidity() {
+            // 1. Отдел
+            const dept = document.getElementById('department');
+            const deptValid = dept.value !== '';
+
+            // 2. Шкала "Встреча" (1-5)
+            const welcome = document.querySelector('input[name="welcome"]:checked');
+            const welcomeValid = !!welcome;
+
+            // 3. Радиокнопки "Ресурсы"
+            const resources = document.querySelector('input[name="resources"]:checked');
+            const resourcesValid = !!resources;
+
+            // 4. Шкала "Знаю, к кому обратиться" (1-5)
+            const knowWho = document.querySelector('input[name="know_who"]:checked');
+            const knowWhoValid = !!knowWho;
+
+            // 5. Бенефиты (хотя бы один чекбокс)
+            const benefits = document.querySelectorAll('input[name="benefits"]:checked');
+            const benefitsValid = benefits.length > 0;
+
+            // 6. Текстовое поле "Самое полезное"
+            const mostUseful = document.getElementById('most_useful');
+            const mostUsefulValid = mostUseful.value.trim().length > 3;
+
+            // 7. Текстовое поле "Что улучшить"
+            const improve = document.getElementById('improve');
+            const improveValid = improve.value.trim().length > 3;
+
+            const isFormValid = deptValid && welcomeValid && resourcesValid && knowWhoValid &&
+                               benefitsValid && mostUsefulValid && improveValid;
+
+            document.getElementById('submit-btn').disabled = !isFormValid;
+            return isFormValid;
+        }
+
+        function getFormData() {
+            const deptSelect = document.getElementById('department');
+            const department = deptSelect.options[deptSelect.selectedIndex]?.text || deptSelect.value;
+
+            const welcome = document.querySelector('input[name="welcome"]:checked')?.value || 'Не выбрано';
+            const resources = document.querySelector('input[name="resources"]:checked')?.value || 'Не выбрано';
+            const knowWho = document.querySelector('input[name="know_who"]:checked')?.value || 'Не выбрано';
+
+            const benefitsList = [];
+            document.querySelectorAll('input[name="benefits"]:checked').forEach(cb => {
+                benefitsList.push(cb.value);
+            });
+            const benefits = benefitsList.join(', ') || 'Не выбрано';
+
+            const mostUseful = document.getElementById('most_useful').value.trim() || 'Не указано';
+            const improve = document.getElementById('improve').value.trim() || 'Не указано';
+
+            return { department, welcome, resources, knowWho, benefits, mostUseful, improve };
+        }
+
+        async function submitForm() {
+            if (!checkFormValidity()) {
+                alert('Пожалуйста, ответьте на все обязательные вопросы.');
+                return;
+            }
+
+            const data = getFormData();
+            const btn = document.getElementById('submit-btn');
+            btn.disabled = true;
+            btn.textContent = 'Отправка...';
+
+            try {
+                const response = await fetch(FORMSPREE_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    document.getElementById('survey').style.display = 'none';
+                    document.getElementById('thank-you').style.display = 'block';
+                } else {
+                    const errorText = await response.text();
+                    alert(`Ошибка отправки (${response.status}): ${errorText}. Попробуйте ещё раз.`);
+                    btn.disabled = false;
+                    btn.textContent = 'Отправить отзыв';
+                }
+            } catch (error) {
+                alert('Ошибка соединения. Проверьте интернет и попробуйте снова.');
+                btn.disabled = false;
+                btn.textContent = 'Отправить отзыв';
+            }
+        }
+
+        // ============================================
+        // 3. ОБРАБОТЧИКИ СОБЫТИЙ
+        // ============================================
+
+        document.addEventListener('change', checkFormValidity);
+        document.addEventListener('input', checkFormValidity);
+
+        document.getElementById('submit-btn').addEventListener('click', submitForm);
+
+        // ============================================
+        // 4. ВАЛИДАЦИЯ ПРИ ЗАГРУЗКЕ
+        // ============================================
+
+        checkFormValidity();
+    </script>
+</body>
+</html>
