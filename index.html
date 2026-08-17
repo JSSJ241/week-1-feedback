@@ -587,7 +587,7 @@
         // ============================================
         // 1. НАСТРОЙКА FORMPREE
         // ============================================
-        const FORMSPREE_URL = "https://formspree.io/f/xnpagvvb";
+        const FORMSPREE_URL = "https://formspree.io/f/xbgrzpll";
 
         // ============================================
         // 2. ОБРАБОТКА ФОРМЫ
@@ -646,7 +646,15 @@
             const mostUseful = document.getElementById('most_useful').value.trim() || 'Не указано';
             const improve = document.getElementById('improve').value.trim() || 'Не указано';
 
-            return { department, welcome, resources, knowWho, benefits, mostUseful, improve };
+            return {
+                "Отдел": department,
+                "Встреча в первый день (1-5)": welcome,
+                "Всё необходимое есть?": resources,
+                "Знаю, к кому обратиться (1-5)": knowWho,
+                "Бенефиты": benefits,
+                "Что было самым полезным": mostUseful,
+                "Что улучшить": improve
+            };
         }
 
         async function submitForm() {
